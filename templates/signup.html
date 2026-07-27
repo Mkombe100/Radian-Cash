@@ -1,234 +1,362 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign Up</title>
 
-        body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background-color: #F5F5F5; /* smoke white */
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        .signup-container {
-            background-color: #FFFFFF;
-            width: 100%;
-            max-width: 480px;
-            padding: 48px 40px;
-            border-radius: 16px;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
-            border: 1px solid rgba(255, 204, 17, 0.25);
-        }
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background-color: #F5F5F5;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
 
-        h1 {
-            color: #FFCC11;
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-            text-align: center;
-        }
+.signup-container {
+    background-color: #FFFFFF;
+    width: 100%;
+    max-width: 480px;
+    padding: 40px 35px;
+    border-radius: 16px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+    border: 1px solid rgba(255,204,17,0.25);
+}
 
-        .subtitle {
-            color: #FFCC11;
-            text-align: center;
-            font-size: 0.95rem;
-            margin-bottom: 32px;
-            opacity: 0.9;
-        }
+h1 {
+    color:#FFCC11;
+    font-size:2rem;
+    font-weight:700;
+    margin-bottom:8px;
+    text-align:center;
+}
 
-        .messages {
-            list-style: none;
-            margin-bottom: 24px;
-        }
+.subtitle {
+    color:#FFCC11;
+    text-align:center;
+    font-size:0.95rem;
+    margin-bottom:25px;
+}
 
-        .messages li {
-            background-color: #FFCC11;
-            color: #FFFFFF;
-            padding: 12px 16px;
-            border-radius: 8px;
-            margin-bottom: 8px;
-            font-size: 0.9rem;
-        }
+.messages {
+    list-style:none;
+    margin-bottom:20px;
+}
 
-        .form-group {
-            margin-bottom: 18px;
-        }
+.messages li {
+    background:#FFCC11;
+    color:white;
+    padding:12px 16px;
+    border-radius:8px;
+    font-size:0.9rem;
+}
 
-        label {
-            display: block;
-            color: #FFCC11;
-            font-weight: 600;
-            font-size: 0.9rem;
-            margin-bottom: 8px;
-        }
+.form-group {
+    margin-bottom:15px;
+}
 
-        input[type="text"],
-        input[type="email"],
-        input[type="password"] {
-            width: 100%;
-            padding: 14px 16px;
-            border: 2px solid #FFCC11;
-            border-radius: 10px;
-            font-size: 1rem;
-            color: #333;
-            background-color: #FFFFFF;
-            transition: border-color 0.2s, box-shadow 0.2s;
-            outline: none;
-        }
+label {
+    display:block;
+    color:#FFCC11;
+    font-weight:600;
+    font-size:0.9rem;
+    margin-bottom:6px;
+}
 
-        input[type="text"]:focus,
-        input[type="email"]:focus,
-        input[type="password"]:focus {
-            border-color: #FFCC11;
-            box-shadow: 0 0 0 4px rgba(255, 204, 17, 0.25);
-        }
+input[type="text"],
+input[type="email"],
+input[type="password"] {
 
-        input::placeholder {
-            color: #bbb;
-        }
+    width:100%;
+    padding:13px 14px;
+    border:2px solid #FFCC11;
+    border-radius:10px;
+    font-size:1rem;
+    color:#333;
+    outline:none;
+    background:white;
+}
 
-        .name-row {
-            display: flex;
-            gap: 16px;
-        }
+input:focus {
+    box-shadow:0 0 0 4px rgba(255,204,17,0.25);
+}
 
-        .name-row .form-group {
-            flex: 1;
-        }
+input::placeholder {
+    color:#bbb;
+}
 
-        .submit-btn {
-            width: 100%;
-            padding: 16px;
-            background-color: #FFCC11;
-            color: #FFFFFF;
-            border: none;
-            border-radius: 10px;
-            font-size: 1.05rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: background-color 0.2s, transform 0.15s;
-            margin-top: 12px;
-        }
+.name-row {
+    display:flex;
+    gap:15px;
+}
 
-        .submit-btn:hover {
-            background-color: #e6b800;
-            transform: translateY(-1px);
-        }
+.name-row .form-group {
+    flex:1;
+}
 
-        .submit-btn:active {
-            transform: translateY(0);
-        }
+.submit-btn {
 
-        .login-link {
-            text-align: center;
-            margin-top: 28px;
-            font-size: 0.95rem;
-        }
+    width:100%;
+    padding:15px;
+    background:#FFCC11;
+    color:white;
+    border:none;
+    border-radius:10px;
+    font-size:1rem;
+    font-weight:700;
+    cursor:pointer;
+    margin-top:10px;
+}
 
-        .login-link a {
-            color: #FFCC11;
-            text-decoration: none;
-            font-weight: 600;
-            transition: opacity 0.2s;
-        }
 
-        .login-link a:hover {
-            opacity: 0.8;
-            text-decoration: underline;
-        }
+.login-link {
 
-        /* Mobile adjustments */
-        @media (max-width: 520px) {
-            .signup-container {
-                padding: 36px 24px;
-                border-radius: 12px;
-            }
+    text-align:center;
+    margin-top:22px;
+    font-size:0.9rem;
+}
 
-            h1 {
-                font-size: 1.75rem;
-            }
+.login-link a {
 
-            .name-row {
-                flex-direction: column;
-                gap: 0;
-            }
+    color:#FFCC11;
+    text-decoration:none;
+    font-weight:600;
+}
 
-            input[type="text"],
-            input[type="email"],
-            input[type="password"] {
-                padding: 13px 14px;
-            }
 
-            .submit-btn {
-                padding: 15px;
-            }
-        }
-    </style>
+/* Mobile adjustments */
+@media (max-width:520px) {
+
+    body {
+        padding:8px;
+    }
+
+    .signup-container {
+
+        padding:25px 18px;
+        border-radius:12px;
+    }
+
+
+    h1 {
+        font-size:1.5rem;
+    }
+
+
+    .subtitle {
+
+        font-size:0.85rem;
+        margin-bottom:18px;
+    }
+
+
+    .messages li {
+
+        padding:10px;
+        font-size:0.8rem;
+    }
+
+
+    .form-group {
+
+        margin-bottom:12px;
+    }
+
+
+    label {
+
+        font-size:0.8rem;
+    }
+
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+
+        padding:11px 12px;
+        font-size:0.9rem;
+    }
+
+
+    .name-row {
+
+        flex-direction:column;
+        gap:0;
+    }
+
+
+    .submit-btn {
+
+        padding:13px;
+        font-size:0.95rem;
+    }
+
+
+    .login-link {
+
+        margin-top:15px;
+        font-size:0.8rem;
+    }
+}
+
+</style>
+
 </head>
+
 <body>
-    <div class="signup-container">
-        <h1>RADIAN CASH</h1>
-        <p class="subtitle">Create your account</p>
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                <ul class="messages">
-                    {% for category, message in messages %}
-                        <li>{{ category }}: {{ message }}</li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        {% endwith %}
+<div class="signup-container">
 
-        <form action="/signup" method="post">
-            <div class="name-row">
-                <div class="form-group">
-                    <label for="first_name">First Name</label>
-                    <input type="text" id="first_name" name="first_name" placeholder="John" required>
-                </div>
-                <div class="form-group">
-                    <label for="middle_name">Middle Name</label>
-                    <input type="text" id="middle_name" name="middle_name" placeholder="A." required>
-                </div>
-            </div>
+<h1>RADIAN CASH</h1>
 
-            <div class="form-group">
-                <label for="last_name">Last Name</label>
-                <input type="text" id="last_name" name="last_name" placeholder="Doe" required>
-            </div>
+<p class="subtitle">
+Create your account
+</p>
 
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" placeholder="you@example.com" required>
-            </div>
 
-            <div class="form-group">
-                <label for="phone_number">Phone Number</label>
-                <input type="text" id="phone_number" name="phone_number" placeholder="+1 234 567 890" required>
-            </div>
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
 
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="••••••••" required>
-            </div>
+<ul class="messages">
 
-            <button type="submit" class="submit-btn">Sign Up</button>
-        </form>
+{% for category, message in messages %}
 
-        <p class="login-link">
-            Already have an account?<a href="/log-in"> Log in</a>
-        </p>
-    </div>
+<li>{{ category }}: {{ message }}</li>
+
+{% endfor %}
+
+</ul>
+
+{% endif %}
+{% endwith %}
+
+
+
+<form action="/signup" method="post">
+
+
+<div class="name-row">
+
+<div class="form-group">
+
+<label for="first_name">First Name</label>
+
+<input 
+type="text" 
+id="first_name" 
+name="first_name" 
+placeholder="John" 
+required>
+
+</div>
+
+
+<div class="form-group">
+
+<label for="middle_name">Middle Name</label>
+
+<input 
+type="text" 
+id="middle_name" 
+name="middle_name" 
+placeholder="A." 
+required>
+
+</div>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label for="last_name">Last Name</label>
+
+<input 
+type="text" 
+id="last_name" 
+name="last_name" 
+placeholder="Doe" 
+required>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label for="email">Email</label>
+
+<input 
+type="email" 
+id="email" 
+name="email" 
+placeholder="you@example.com" 
+required>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label for="phone_number">Phone Number</label>
+
+<input 
+type="text" 
+id="phone_number" 
+name="phone_number" 
+placeholder="+1 234 567 890" 
+required>
+
+</div>
+
+
+
+<div class="form-group">
+
+<label for="password">Password</label>
+
+<input 
+type="password" 
+id="password" 
+name="password" 
+placeholder="••••••••" 
+required>
+
+</div>
+
+
+
+<button type="submit" class="submit-btn">
+Sign Up
+</button>
+
+
+</form>
+
+
+
+<p class="login-link">
+
+Already have an account?
+
+<a href="/log-in"> Log in</a>
+
+</p>
+
+
+</div>
+
+
 </body>
 </html>
