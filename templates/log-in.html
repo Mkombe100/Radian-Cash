@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Log In</title>
+
     <style>
         * {
             margin: 0;
@@ -12,7 +13,7 @@
         }
 
         body {
-            background-image: url("{{ url_for('static', filename='assets/coin2.jpg') }}");
+            background-image: none;
             background-size: cover;
             background-position: center;
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
@@ -21,6 +22,10 @@
             align-items: center;
             justify-content: center;
             padding: 20px;
+        }
+
+        body.show-image {
+            background-image: url("{{ url_for('static', filename='assets/coin2.jpg') }}");
         }
 
         .login-container {
@@ -46,7 +51,6 @@
             text-align: center;
             font-size: 0.95rem;
             margin-bottom: 32px;
-            opacity: 0.9;
         }
 
         .messages {
@@ -83,20 +87,7 @@
             border-radius: 10px;
             font-size: 1rem;
             color: #333;
-            background-color: #FFFFFF;
-            transition: border-color 0.2s, box-shadow 0.2s;
             outline: none;
-        }
-
-        input[type="email"]:focus,
-        input[type="password"]:focus {
-            border-color: #FFCC11;
-            box-shadow: 0 0 0 4px rgba(255, 204, 17, 0.25);
-        }
-
-        input[type="email"]::placeholder,
-        input[type="password"]::placeholder {
-            color: #bbb;
         }
 
         .submit-btn {
@@ -109,17 +100,6 @@
             font-size: 1.05rem;
             font-weight: 700;
             cursor: pointer;
-            transition: background-color 0.2s, transform 0.15s;
-            margin-top: 8px;
-        }
-
-        .submit-btn:hover {
-            background-color: #e6b800;
-            transform: translateY(-1px);
-        }
-
-        .submit-btn:active {
-            transform: translateY(0);
         }
 
         .signup-link {
@@ -132,44 +112,20 @@
             color: #FFCC11;
             text-decoration: none;
             font-weight: 600;
-            transition: opacity 0.2s;
-        }
-
-        .signup-link a:hover {
-            opacity: 0.8;
-            text-decoration: underline;
-        }
-
-        /* Mobile adjustments */
-        @media (max-width: 480px) {
-            .login-container {
-                padding: 36px 24px;
-                border-radius: 12px;
-            }
-
-            h1 {
-                font-size: 1.75rem;
-            }
-
-            input[type="email"],
-            input[type="password"] {
-                padding: 13px 14px;
-            }
-
-            .submit-btn {
-                padding: 15px;
-            }
         }
     </style>
 </head>
+
 <body>
+
     <div class="login-container">
+
         <h1>RADIAN CASH</h1>
         <p class="subtitle">Welcome back</p>
 
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
-                <ul class="messages">
+                <ul class="messages" id="flashMessage">
                     {% for category, message in messages %}
                         <li>{{ category }}: {{ message }}</li>
                     {% endfor %}
@@ -177,23 +133,65 @@
             {% endif %}
         {% endwith %}
 
+
         <form action="/log-in" method="post">
+
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" id="email" name="email" placeholder="you@example.com" required>
+                <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    placeholder="you@example.com" 
+                    required>
             </div>
+
 
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="••••••••" required>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    placeholder="••••••••" 
+                    required>
             </div>
 
-            <button type="submit" class="submit-btn">Log In</button>
+
+            <button type="submit" class="submit-btn">
+                Log In
+            </button>
+
         </form>
 
+
         <p class="signup-link">
-            Dont have an account? <a href="/signup">Create an account</a>
+            Dont have an account?
+            <a href="/signup">Create an account</a>
         </p>
+
     </div>
+
+
+<script>
+window.onload = function(){
+
+    let message = document.getElementById("flashMessage");
+
+    if(message){
+
+        setTimeout(function(){
+            document.body.classList.add("show-image");
+        }, 3000);
+
+    } else {
+
+        document.body.classList.add("show-image");
+
+    }
+
+}
+</script>
+
 </body>
 </html>
