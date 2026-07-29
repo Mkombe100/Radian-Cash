@@ -706,6 +706,33 @@
                     <div class="network-actions">
                         <button class="btn-primary">Add Network</button>
                     </div>
+                       <form action="/networks/new" method="post" class="network-form">
+                        <label for="network_name">Network Name</label>
+                        <input id="network_name" name="network_name" type="text" required>
+
+                        <label for="agent_number">Agent Number</label>
+                        <input id="agent_number" name="agent_number" type="number" required>
+
+                        <label for="lipa_number">Lipa Number</label>
+                        <input id="lipa_number" name="lipa_number" type="number" required>
+
+                        <button type="submit" class="btn-primary">Save Network</button>
+                    </form>
+                </div>
+                <div class="network-card">
+                    <h4>Existing Networks</h4>
+                    <p>Available networks for recording transactions.</p>
+                    <div class="network-list">
+                        {% if networks %}
+                            <ul>
+                                {% for network in networks %}
+                                    <li>{{ network.name }} — Agent: {{ network.agent_number or 'N/A' }}, Lipa: {{ network.lipa_number or 'N/A' }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p>No networks yet. Add one.</p>
+                        {% endif %}
+                    </div>
                 </div>
                 <div class="network-card">
                     <h4>Delete Network</h4>
