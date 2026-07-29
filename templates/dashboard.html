@@ -4,11 +4,228 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Welcome, {{ first_name }}</h1>
-    <p>You are logged in.</p>
-    <p>Your session will expire after 30 minutes of inactivity.</p>
-    <a href="/logout">Log out</a>
+    <header>
+        <h1>Welcome, {{ first_name }}</h1>
+        <a href="/logout">Log out</a>
+    </header>
+
+    <!-- ========== DESKTOP: 4-column row + content below ========== -->
+    <nav class="desktop-nav">
+        <div class="desktop-nav-item active" data-target="transactions">Transactions</div>
+        <div class="desktop-nav-item" data-target="networks">Networks</div>
+        <div class="desktop-nav-item" data-target="analysis">Analysis</div>
+        <div class="desktop-nav-item" data-target="reports">Reports</div>
+    </nav>
+
+    <div class="desktop-content">
+        <!-- Transactions -->
+        <section id="transactions" class="section active">
+            <div class="actions-bar">
+                <button class="btn-primary">Create New Transaction</button>
+            </div>
+            <h3>View Transaction History</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Network</th>
+                            <th>Type</th>
+                            <th>Service Name</th>
+                            <th>Amount</th>
+                            <th>Commission</th>
+                            <th>Reference No</th>
+                            <th>Phone Number</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>YAS</td>
+                            <td>deposit</td>
+                            <td>NO</td>
+                            <td>10,000</td>
+                            <td>230.5</td>
+                            <td>16282t3te3</td>
+                            <td>0382372873</td>
+                            <td>Loves you always</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>YAS</td>
+                            <td>deposit</td>
+                            <td>NO</td>
+                            <td>10,000</td>
+                            <td>230.5</td>
+                            <td>16282t3te3</td>
+                            <td>0382372873</td>
+                            <td>Loves you always</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Networks -->
+        <section id="networks" class="section">
+            <h3>Manage Networks</h3>
+            <div class="network-cards">
+                <div class="network-card">
+                    <h4>Add a Network</h4>
+                    <p>Create a new payment network configuration.</p>
+                    <div class="network-actions">
+                        <button class="btn-primary">Add Network</button>
+                    </div>
+                </div>
+                <div class="network-card">
+                    <h4>Delete Network</h4>
+                    <p>Remove an existing network from the system.</p>
+                    <div class="network-actions">
+                        <button class="btn-danger">Delete Network</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Analysis -->
+        <section id="analysis" class="section">
+            <h3>Analysis</h3>
+            <p style="color:#666; font-size:0.95rem;">
+                Add charts, KPIs, and summaries here.
+            </p>
+        </section>
+
+        <!-- Reports -->
+        <section id="reports" class="section">
+            <h3>Reports</h3>
+            <p style="color:#666; font-size:0.95rem;">
+                Add downloadable reports and filters here.
+            </p>
+        </section>
+    </div>
+
+    <!-- ========== MOBILE: 4 vertical full-height blocks ========== -->
+    <div class="mobile-dashboard">
+        <div class="mobile-nav-item transactions" data-panel="transactions">Transactions</div>
+        <div class="mobile-nav-item networks" data-panel="networks">Networks</div>
+        <div class="mobile-nav-item analysis" data-panel="analysis">Analysis</div>
+        <div class="mobile-nav-item reports" data-panel="reports">Reports</div>
+    </div>
+
+    <!-- Mobile panels -->
+    <div class="mobile-panel" id="panel-transactions">
+        <div class="mobile-panel-header">
+            <button class="back-btn" type="button">←</button>
+            <div class="mobile-panel-title">Transactions</div>
+        </div>
+        <div class="mobile-panel-content">
+            <div class="actions-bar">
+                <button class="btn-primary">Create New Transaction</button>
+            </div>
+            <h3>View Transaction History</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Network</th>
+                            <th>Type</th>
+                            <th>Service Name</th>
+                            <th>Amount</th>
+                            <th>Commission</th>
+                            <th>Reference No</th>
+                            <th>Phone Number</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>YAS</td>
+                            <td>deposit</td>
+                            <td>NO</td>
+                            <td>10,000</td>
+                            <td>230.5</td>
+                            <td>16282t3te3</td>
+                            <td>0382372873</td>
+                            <td>Loves you always</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>YAS</td>
+                            <td>deposit</td>
+                            <td>NO</td>
+                            <td>10,000</td>
+                            <td>230.5</td>
+                            <td>16282t3te3</td>
+                            <td>0382372873</td>
+                            <td>Loves you always</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="mobile-panel" id="panel-networks">
+        <div class="mobile-panel-header">
+            <button class="back-btn" type="button">←</button>
+            <div class="mobile-panel-title">Networks</div>
+        </div>
+        <div class="mobile-panel-content">
+            <h3>Manage Networks</h3>
+            <div class="network-cards">
+                <div class="network-card">
+                    <h4>Add a Network</h4>
+                    <p>Create a new payment network configuration.</p>
+                    <div class="network-actions">
+                        <button class="btn-primary">Add Network</button>
+                    </div>
+                </div>
+                <div class="network-card">
+                    <h4>Delete Network</h4>
+                    <p>Remove an existing network from the system.</p>
+                    <div class="network-actions">
+                        <button class="btn-danger">Delete Network</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mobile-panel" id="panel-analysis">
+        <div class="mobile-panel-header">
+            <button class="back-btn" type="button">←</button>
+            <div class="mobile-panel-title">Analysis</div>
+        </div>
+        <div class="mobile-panel-content">
+            <h3>Analysis</h3>
+            <p style="color:#666; font-size:0.95rem;">
+                Add charts, KPIs, and summaries here.
+            </p>
+        </div>
+    </div>
+
+    <div class="mobile-panel" id="panel-reports">
+        <div class="mobile-panel-header">
+            <button class="back-btn" type="button">←</button>
+            <div class="mobile-panel-title">Reports</div>
+        </div>
+        <div class="mobile-panel-content">
+            <h3>Reports</h3>
+            <p style="color:#666; font-size:0.95rem;">
+                Add downloadable reports and filters here.
+            </p>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 Dashboard. All rights reserved.
+    </footer>
+    <script src="script.js"></script>
 </body>
 </html>
