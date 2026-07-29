@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta, timezone
+from decimal import Decimal, InvalidOperation
 from functools import wraps
 import os
 
@@ -17,6 +18,106 @@ def get_db_connection():
     from db_connection.connection import get_connection as connection_factory
 
     return connection_factory()
+
+
+def get_user_transactions(user_id: int) -> list[dict]:
+    conn = get_db_connection()
+    try:
+        cur = conn.cursor()
+        cur.execute(
+            """
+            SELECT
+                t.id,
+                t.transaction_date,
+                n.name AS network_name,
+                t.transaction_type,
+                t.service_name,
+                t.amount,
+                t.commission,
+                t.reference_number,
+                t.customer_phone,
+                t.notes
+            FROM transactions t
+            JOIN networks n ON t.network_id = n.id
+            WHERE t.user_id = %s
+            ORDER BY t.transaction_date DESC
+            """,
+            (user_id,),
+        )
+        rows = cur.fetchall()
+        columns = [desc[0] for desc in cur.description]
+        return [dict(zip(columns, row)) for row in rows]
+    finally:
+        cur.close()
+        conn.close()
+
+
+def get_all_networks() -> list[dict]:
+    conn = get_db_connection()
+    try:
+        cur = conn.cursor()
+        cur.execute(
+            "SELECT id, name, agent_number, lipa_number FROM networks ORDER BY name"
+        )
+        rows = cur.fetchall()
+        columns = [desc[0] for desc in cur.description]
+        return [dict(zip(columns, row)) for row in rows]
+    finally:
+        cur.close()
+        conn.close()
+
+
+def add_transaction_for_user(
+    user_id: int,
+    network_id: int,
+    transaction_type: str,
+    service_name: str | None,
+    amount: Decimal,
+    commission: Decimal,
+    reference_number: str | None,
+    customer_phone: str | None,
+    notes: str | None,
+) -> None:
+    conn = get_db_connection()
+    try:
+        cur = conn.cursor()
+        cur.execute(
+            "SELECT id FROM networks WHERE id = %s",
+            (network_id,),
+        )
+        if cur.fetchone() is None:
+            raise ValueError("Selected network does not exist.")
+
+        cur.execute(
+            """
+            INSERT INTO transactions (
+                network_id,
+                transaction_type,
+                service_name,
+                amount,
+                commission,
+                reference_number,
+                customer_phone,
+                notes,
+                user_id
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """,
+            (
+                network_id,
+                transaction_type,
+                service_name,
+                amount,
+                commission,
+                reference_number,
+                customer_phone,
+                notes,
+                user_id,
+            ),
+        )
+        conn.commit()
+    finally:
+        cur.close()
+        conn.close()
 
 
 def hash_password(password: str) -> str:
@@ -185,15 +286,119 @@ def logout():
     return redirect(url_for("login"))
 
 
+@app.route("/transactions/new", methods=["POST"])
+@login_required
+def create_transaction():
+    network_id_text = request.form.get("network_id", "").strip()
+    transaction_type = request.form.get("transaction_type", "").strip()
+    service_name = request.form.get("service_name", "").strip() or None
+    amount_text = request.form.get("amount", "").strip()
+    commission_text = request.form.get("commission", "").strip()
+    reference_number = request.form.get("reference_number", "").strip() or None
+    customer_phone = request.form.get("customer_phone", "").strip() or None
+    notes = request.form.get("notes", "").strip() or None
+
+    if not network_id_text or not transaction_type or not amount_text:
+        flash("Network, transaction type, and amount are required.", "danger")
+        return redirect(url_for("dashboard"))
+
+    try:
+        network_id = int(network_id_text)
+    except ValueError:
+        flash("Please select a valid network from the list.", "danger")
+        return redirect(url_for("dashboard"))
+
+    try:
+        amount = Decimal(amount_text.replace(",", ""))
+    except (InvalidOperation, ValueError):
+        flash("Please enter a valid numeric amount.", "danger")
+        return redirect(url_for("dashboard"))
+
+    if commission_text:
+        try:
+            commission = Decimal(commission_text.replace(",", ""))
+        except (InvalidOperation, ValueError):
+            flash("Please enter a valid numeric commission.", "danger")
+            return redirect(url_for("dashboard"))
+    else:
+        commission = Decimal("0")
+
+    try:
+        add_transaction_for_user(
+            user_id=session["user_id"],
+            network_id=network_id,
+            transaction_type=transaction_type,
+            service_name=service_name,
+            amount=amount,
+            commission=commission,
+            reference_number=reference_number,
+            customer_phone=customer_phone,
+            notes=notes,
+        )
+        flash("Transaction added successfully.", "success")
+    except Exception as exc:
+        flash(f"Failed to add transaction: {exc}", "danger")
+
+    return redirect(url_for("dashboard"))
+
+
+@app.route("/networks/new", methods=["POST"])
+@login_required
+def create_network():
+    name = request.form.get("network_name", "").strip()
+    agent_number_text = request.form.get("agent_number", "").strip()
+    lipa_number_text = request.form.get("lipa_number", "").strip()
+
+    if not name or not agent_number_text or not lipa_number_text:
+        flash("Network name, agent number, and lipa number are required.", "danger")
+        return redirect(url_for("dashboard"))
+
+    try:
+        agent_number = int(agent_number_text)
+        lipa_number = int(lipa_number_text)
+    except ValueError:
+        flash("Agent number and lipa number must be whole numbers.", "danger")
+        return redirect(url_for("dashboard"))
+
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute(
+            "SELECT id FROM networks WHERE LOWER(name) = LOWER(%s)",
+            (name.lower(),),
+        )
+        if cur.fetchone():
+            flash("A network with that name already exists.", "danger")
+            cur.close()
+            conn.close()
+            return redirect(url_for("dashboard"))
+
+        cur.execute(
+            "INSERT INTO networks (name, agent_number, lipa_number) VALUES (%s, %s, %s)",
+            (name, agent_number, lipa_number),
+        )
+        conn.commit()
+        cur.close()
+        conn.close()
+        flash("Network added successfully.", "success")
+    except Exception as exc:
+        flash(f"Failed to add network: {exc}", "danger")
+
+    return redirect(url_for("dashboard"))
+
+
 @app.route("/dashboard")
 @login_required
 def dashboard():
-    return render_template("dashboard.html", first_name=session.get("first_name", "User"))
+    transactions = get_user_transactions(session["user_id"])
+    networks = get_all_networks()
+    return render_template(
+        "dashboard.html",
+        first_name=session.get("first_name", "User"),
+        transactions=transactions,
+        networks=networks,
+    )
 
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 10000)))
-
-
-
-
+if __name__ == "__main__":
+    app.run(debug=True)
