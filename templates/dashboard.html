@@ -613,6 +613,41 @@
             <div class="actions-bar">
                 <button class="btn-primary" id="open-transaction-form-mobile">Create New Transaction</button>
             </div>
+            <form action="/transactions/new" method="post" class="transaction-form">
+                        <label for="network_id">Network</label>
+                        <select id="network_id" name="network_id" required>
+                            <option value="" disabled selected>Select network</option>
+                            {% for network in networks %}
+                                <option value="{{ network.id }}">{{ network.name }}</option>
+                            {% endfor %}
+                        </select>
+
+                        <label for="transaction_type">Transaction Type</label>
+                        <input id="transaction_type" name="transaction_type" type="text" required>
+
+                        <label for="service_name">Service Name</label>
+                        <input id="service_name" name="service_name" type="text">
+
+                        <label for="amount">Amount</label>
+                        <input id="amount" name="amount" type="text" required>
+
+                        <label for="commission">Commission</label>
+                        <input id="commission" name="commission" type="text">
+
+                        <label for="reference_number">Reference Number</label>
+                        <input id="reference_number" name="reference_number" type="text">
+
+                        <label for="customer_phone">Customer Phone</label>
+                        <input id="customer_phone" name="customer_phone" type="text">
+
+                        <label for="notes">Notes</label>
+                        <textarea id="notes" name="notes" rows="3"></textarea>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" id="cancel-transaction-form">Cancel</button>
+                            <button type="submit" class="btn-primary">Save Transaction</button>
+                        </div>
+                    </form>
             <h3>View Transaction History</h3>
             <div class="table-wrapper">
                 <table>
